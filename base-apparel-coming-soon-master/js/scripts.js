@@ -1,21 +1,25 @@
-const form = document.getElementById('form');
-const email = document.getElementById('email');
-const error_msg = document.getElementById('error-icon');
+const input = document.getElementById('email');
+const sendBtn = document.getElementById('btn-submit');
+const errorIcon = document.getElementById('error-icon');
+const textError = document.getElementById('text-error');
 
-form.addEventListener('submit', e => {
-  e.preventDefault();
-  const emailVal = email.value;
+const emailValidation = /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$/;
 
-  if (!validateEmail(emailVal)) {
-    form.classList.add('error');
-    error_msg.style.display="block";
+
+const timeoutFunc = setInterval(() => {
+  errorIcon.style.display = "none";
+  textError.style.display = "none";
+},3000);
+
+sendBtn.addEventListener('click', function() {
+  if(input.value.length === 0 || !input.value.match(emailValidation)) {
+    errorIcon.style.display = "block";
+    textError.style.display = "block";
+    return timeoutFunc;
   } else {
-    form.classList.remove('error');
-    document.body.innerHTML = '<div style"=display:flex; align-items: center; justify-content: center;"><h1>Thank you!</h1></div>';
+    textError.style.display = "block";
+    textError.style.color = "green";
+    textError.textContent = "Thank you!";
+    return timeoutFunc;
   }
 });
-
-function validateEmail(email) {
-  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
